@@ -8,13 +8,13 @@ exports.create = (req, res) => {
     })
   }
 
-  const tutorial = new Parking({
+  const parking = new Parking({
     name: req.body.name,
     address: req.body.address,
     user_id: req.body.user_id
   })
 
-  Parking.create(tutorial, (err, data) => {
+  Parking.create(parking, (err, data) => {
     if (err)
       res.status(500).send({
         message: err.message || "Some error occurred while creating the Parking."

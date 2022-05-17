@@ -1,26 +1,26 @@
 const sql = require("./db.js")
 
-const parking = function (parking) {
-  this.name = parking.name
-  this.address = parking.address
-  this.user_id = parking.user_id
+const place = function (place) {
+  this.name = place.name
+  this.address = place.address
+  this.user_id = place.user_id
 }
 
-parking.create = (newParking, result) => {
-  sql.query("INSERT INTO parking SET ?", newParking, (err, res) => {
+place.create = (newPlace, result) => {
+  sql.query("INSERT INTO place SET ?", newPlace, (err, res) => {
     if (err) {
       console.log("error: ", err)
       result(err, null)
       return
     }
-    console.log("created parking: ", {id: res.insertId, ...newParking})
-    result(null, {id: res.insertId, ...newParking})
+    console.log("created place: ", {id: res.insertId, ...newPlace})
+    result(null, {id: res.insertId, ...newPlace})
   })
 }
 
-parking.findById = (id, result) => {
+place.findById = (id, result) => {
   sql.query(`SELECT *
-             FROM parking
+             FROM place
              WHERE id = ${id}`, (err, res) => {
     if (err) {
       console.log("error: ", err)
@@ -28,31 +28,31 @@ parking.findById = (id, result) => {
       return
     }
     if (res.length) {
-      console.log("found parking: ", res[0])
+      console.log("found place: ", res[0])
       result(null, res[0])
       return
     }
-    // not found parking with the id
+    // not found place with the id
     result({kind: "not_found"}, null)
   })
 }
 
-parking.getAllByUserId = (user_id, result) => {
-  sql.query("SELECT * FROM parking WHERE user_id= ?", user_id, (err, res) => {
+place.getAllByUserId = (user_id, result) => {
+  sql.query("SELECT * FROM place WHERE user_id= ?", user_id, (err, res) => {
     if (err) {
       console.log("error: ", err)
       result(null, err)
       return
     }
-    console.log("parking: ", res)
+    console.log("place: ", res)
     result(null, res)
   })
 }
 
-parking.updateById = (id, parking, result) => {
+place.updateById = (id, place, result) => {
   sql.query(
-          "UPDATE parking SET name = ?, address = ?, user_id = ? WHERE id = ?",
-          [parking.title, parking.description, parking.user_id, id],
+          "UPDATE place SET name = ?, address = ?, user_id = ? WHERE id = ?",
+          [place.title, place.description, place.user_id, id],
           (err, res) => {
             if (err) {
               console.log("error: ", err)
@@ -60,43 +60,43 @@ parking.updateById = (id, parking, result) => {
               return
             }
             if (res.affectedRows === 0) {
-              // not found parking with the id
+              // not found place with the id
               result({kind: "not_found"}, null)
               return
             }
-            console.log("updated parking: ", {id: id, ...parking})
-            result(null, {id: id, ...parking})
+            console.log("updated place: ", {id: id, ...place})
+            result(null, {id: id, ...place})
           }
   )
 }
 
-parking.remove = (id, result) => {
-  sql.query("DELETE FROM parking WHERE id = ?", id, (err, res) => {
+place.remove = (id, result) => {
+  sql.query("DELETE FROM place WHERE id = ?", id, (err, res) => {
     if (err) {
       console.log("error: ", err)
       result(null, err)
       return
     }
     if (res.affectedRows === 0) {
-      // not found parking with the id
+      // not found place with the id
       result({kind: "not_found"}, null)
       return
     }
-    console.log("deleted parking with id: ", id)
+    console.log("deleted place with id: ", id)
     result(null, res)
   })
 }
 
-parking.removeAllByUserId = (user_id, result) => {
-  sql.query("DELETE FROM parking WHERE user_id = ?", parking.user_id, (err, res) => {
+place.removeAllByUserId = (user_id, result) => {
+  sql.query("DELETE FROM place WHERE user_id = ?", place.user_id, (err, res) => {
     if (err) {
       console.log("error: ", err)
       result(null, err)
       return
     }
-    console.log(`deleted ${res.affectedRows} parking`)
+    console.log(`deleted ${res.affectedRows} place`)
     result(null, res)
   })
 }
 
-module.exports = parking
+module.exports = place

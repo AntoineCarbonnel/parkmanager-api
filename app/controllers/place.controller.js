@@ -1,4 +1,4 @@
-const User = require("../models/user.model.js")
+const Place = require("../models/place.model.js")
 
 exports.create = (req, res) => {
 
@@ -8,42 +8,42 @@ exports.create = (req, res) => {
     })
   }
 
-  const user = new User({
+  const place = new Place({
     name: req.body.name,
     address: req.body.address,
     user_id: req.body.user_id
   })
 
-  User.create(user, (err, data) => {
+  Place.create(place, (err, data) => {
     if (err)
       res.status(500).send({
-        message: err.message || "Some error occurred while creating the User."
+        message: err.message || "Some error occurred while creating the place."
       })
     else res.send(data)
   })
 }
 
 exports.findOne = (req, res) => {
-  User.findById(req.params.id, (err, data) => {
+  Place.findById(req.params.id, (err, data) => {
     if (err) {
       if (err.kind === "not_found") {
         res.status(404).send({
-          message: `Not found User with id ${req.params.id}.`
+          message: `Not found place with id ${req.params.id}.`
         })
       } else {
         res.status(500).send({
-          message: "Error retrieving User with id " + req.params.id
+          message: "Error retrieving place with id " + req.params.id
         })
       }
     } else res.send(data)
   })
 }
 
-exports.findAll = (req, res) => {
-  User.getAll(req.params.user_id, (err, data) => {
+exports.findAllByUserId = (req, res) => {
+  Place.getAllByUserId(req.params.user_id, (err, data) => {
     if (err)
       res.status(500).send({
-        message: err.message || `No found Users owned by id ${req.params.id}.`
+        message: err.message || `No found places owned by id ${req.params.id}.`
       })
     else res.send(data)
   })
@@ -57,18 +57,18 @@ exports.update = (req, res) => {
     })
   }
   console.log(req.body)
-  User.updateById(
+  Place.updateById(
           req.params.id,
-          new User(req.body),
+          new place(req.body),
           (err, data) => {
             if (err) {
               if (err.kind === "not_found") {
                 res.status(404).send({
-                  message: `Not found User with id ${req.params.id}.`
+                  message: `Not found place with id ${req.params.id}.`
                 })
               } else {
                 res.status(500).send({
-                  message: "Error updating User with id " + req.params.id
+                  message: "Error updating place with id " + req.params.id
                 })
               }
             } else res.send(data)
@@ -77,28 +77,28 @@ exports.update = (req, res) => {
 }
 
 exports.delete = (req, res) => {
-  User.remove(req.params.id, (err, data) => {
+  Place.remove(req.params.id, (err, data) => {
     if (err) {
       if (err.kind === "not_found") {
         res.status(404).send({
-          message: `Not found User with id ${req.params.id}.`
+          message: `Not found place with id ${req.params.id}.`
         })
       } else {
         res.status(500).send({
-          message: "Could not delete User with id " + req.params.id
+          message: "Could not delete place with id " + req.params.id
         })
       }
-    } else res.send({message: `User was deleted successfully!`})
+    } else res.send({message: `place was deleted successfully!`})
   })
 }
 
-exports.deleteAll = (req, res) => {
-  User.removeAll( (err, data) => {
+exports.deleteAllByUserId = (req, res) => {
+  Place.removeAllByUserId(req.params.id, (err, data) => {
     if (err)
       res.status(500).send({
         message:
-                err.message || "Some error occurred while removing all User's."
+                err.message || "Some error occurred while removing all place's."
       })
-    else res.send({message: `All User's were deleted successfully!`})
+    else res.send({message: `All place's were deleted successfully!`})
   })
 }
