@@ -1,0 +1,1 @@
+INSERT INTO parkmanager.place (id, number, available, floor, occupation_time, user_id, parking_id, created_at, updated_at) VALUES (1, 120, 0, 1, '2022-05-14 11:02:05', 1, 1, '2022-05-18 11:02:14', '2022-05-19 10:02:19');
