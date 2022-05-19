@@ -1,10 +1,13 @@
 require('dotenv').config()
-const express = require("express")
-const cors = require("cors")
-const app = express()
+const express = require("express"),
+        cors = require("cors"),
+        app = express()
+
 let corsOptions = {
-  origin: "http://localhost:8081"
+  origin: "*"
 }
+
+
 app.use(cors(corsOptions))
 
 app.use(express.json())
@@ -15,6 +18,7 @@ app.get("/", (req, res) => {
   res.json({message: "Welcome to PARK MANAGER API."})
 })
 require("./app/routes/parking.routes.js")(app)
+require("./app/routes/user.routes.js")(app)
 
 const PORT = process.env.PORT || 8080
 

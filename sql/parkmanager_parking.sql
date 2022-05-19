@@ -1,0 +1,2 @@
+INSERT INTO parkmanager.parking (id, name, address, user_id, created_at, updated_at) VALUES (1, 'parking des trajenets', '1 rue de la trajectoire, 95340, ermont', 1, '2022-05-18 17:28:36', '2022-05-18 17:28:36');
+INSERT INTO parkmanager.parking (id, name, address, user_id, created_at, updated_at) VALUES (2, 'parking des batignolles', '13 rue du jaguar', 1, '2022-05-18 17:31:43', '2022-05-18 17:31:43');

@@ -5,9 +5,33 @@ const User = function (User) {
   this.lastname = User.lastname
   this.email = User.email
   this.password = User.password
-  this.admin = User.admin
 }
+
+User.findByEmail = (user, result) => {
+  sql.query(`SELECT *
+             FROM User
+             WHERE email = '${user.email}'`,
+          (err, res) => {
+            if (err) {
+              console.log("error: ", err)
+              result(err, null)
+              return
+            }
+            if (res.length) {
+              console.log("Email not found", res[0])
+              result(null, res[0])
+              return
+            }
+            result({kind: "not_found"}, null)
+          })
+}
+
 User.create = (newUser, result) => {
+  const date = new Date()
+
+  newUser.created_at = date
+  newUser.updated_at = date
+
   sql.query("INSERT INTO User SET ?", newUser, (err, res) => {
     if (err) {
       console.log("error: ", err)
@@ -53,8 +77,8 @@ User.getAll = (title, result) => {
 }
 User.updateById = (id, User, result) => {
   sql.query(
-          "UPDATE User SET title = ?, description = ?, published = ? WHERE id = ?",
-          [User.title, User.description, User.published, id],
+          "UPDATE User SET firstname = ?, lastname = ?, email = ? WHERE id = ?",
+          [User.firstname, User.lastname, User.email, id],
           (err, res) => {
             if (err) {
               console.log("error: ", err)

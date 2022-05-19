@@ -46,13 +46,13 @@ LOCK TABLES `parking` WRITE;
 UNLOCK TABLES;
 
 --
--- Table structure for table `place`
+-- Table structure for table `parking`
 --
 
-DROP TABLE IF EXISTS `place`;
+DROP TABLE IF EXISTS `parking`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `place` (
+CREATE TABLE `parking` (
   `id` int NOT NULL AUTO_INCREMENT,
   `number` int DEFAULT NULL,
   `available` tinyint(1) DEFAULT NULL,
@@ -63,22 +63,22 @@ CREATE TABLE `place` (
   `created_at` datetime NOT NULL,
   `updated_at` datetime DEFAULT NULL,
   PRIMARY KEY (`id`),
-  UNIQUE KEY `place_id_uindex` (`id`),
-  UNIQUE KEY `place_number_uindex` (`number`),
-  KEY `place_parking_id_fk` (`parking_id`),
-  KEY `place_user_id_fk` (`user_id`),
-  CONSTRAINT `place_parking_id_fk` FOREIGN KEY (`parking_id`) REFERENCES `parking` (`id`) ON DELETE CASCADE,
-  CONSTRAINT `place_user_id_fk` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) ON DELETE CASCADE
+  UNIQUE KEY `parking_id_uindex` (`id`),
+  UNIQUE KEY `parking_number_uindex` (`number`),
+  KEY `parking_parking_id_fk` (`parking_id`),
+  KEY `parking_user_id_fk` (`user_id`),
+  CONSTRAINT `parking_parking_id_fk` FOREIGN KEY (`parking_id`) REFERENCES `parking` (`id`) ON DELETE CASCADE,
+  CONSTRAINT `parking_user_id_fk` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `place`
+-- Dumping data for table `parking`
 --
 
-LOCK TABLES `place` WRITE;
-/*!40000 ALTER TABLE `place` DISABLE KEYS */;
-/*!40000 ALTER TABLE `place` ENABLE KEYS */;
+LOCK TABLES `parking` WRITE;
+/*!40000 ALTER TABLE `parking` DISABLE KEYS */;
+/*!40000 ALTER TABLE `parking` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --

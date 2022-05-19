@@ -1,0 +1,1 @@
+INSERT INTO parkmanager.user (id, firstname, lastname, email, password, admin, created_at, updated_at) VALUES (1, 'antoineaze', 'carbonnel', 'antoinecarbonnel@yahoo.fr', '$2b$10$VgxUjrww.qUBsd24auIEKeJV0fwQCvKYQRbn8Dcb0uhE9V0O98Hwq', 1, '2022-05-18 13:03:18', '2022-05-18 13:03:18');

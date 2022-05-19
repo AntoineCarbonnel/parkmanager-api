@@ -39,6 +39,16 @@ exports.findOne = (req, res) => {
   })
 }
 
+exports.findAll = (req, res) => {
+  Parking.findAll( (err, data) => {
+    if (err)
+      res.status(500).send({
+        message: err.message || `No found Parkings`
+      })
+    else res.send(data)
+  })
+}
+
 exports.findAllByUserId = (req, res) => {
   Parking.getAllByUserId(req.params.user_id, (err, data) => {
     if (err)

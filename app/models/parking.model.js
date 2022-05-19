@@ -1,26 +1,32 @@
 const sql = require("./db.js")
 
-const place = function (place) {
-  this.name = place.name
-  this.address = place.address
-  this.user_id = place.user_id
+const parking = function (parking) {
+  this.name = parking.name
+  this.address = parking.address
+  this.user_id = parking.user_id
 }
 
-place.create = (newPlace, result) => {
-  sql.query("INSERT INTO place SET ?", newPlace, (err, res) => {
+parking.create = (newParking, result) => {
+
+  const date = new Date()
+
+  newParking.created_at = date
+  newParking.updated_at = date
+
+  sql.query("INSERT INTO parking SET ?", newParking, (err, res) => {
     if (err) {
       console.log("error: ", err)
       result(err, null)
       return
     }
-    console.log("created place: ", {id: res.insertId, ...newPlace})
-    result(null, {id: res.insertId, ...newPlace})
+    console.log("created parking: ", {id: res.insertId, ...newParking})
+    result(null, {id: res.insertId, ...newParking})
   })
 }
 
-place.findById = (id, result) => {
+parking.findById = (id, result) => {
   sql.query(`SELECT *
-             FROM place
+             FROM parking
              WHERE id = ${id}`, (err, res) => {
     if (err) {
       console.log("error: ", err)
@@ -28,31 +34,43 @@ place.findById = (id, result) => {
       return
     }
     if (res.length) {
-      console.log("found place: ", res[0])
+      console.log("found parking: ", res[0])
       result(null, res[0])
       return
     }
-    // not found place with the id
+    // not found parking with the id
     result({kind: "not_found"}, null)
   })
 }
 
-place.getAllByUserId = (user_id, result) => {
-  sql.query("SELECT * FROM place WHERE user_id= ?", user_id, (err, res) => {
+parking.getAllByUserId = (user_id, result) => {
+  sql.query("SELECT * FROM parking WHERE user_id= ?", user_id, (err, res) => {
     if (err) {
       console.log("error: ", err)
       result(null, err)
       return
     }
-    console.log("place: ", res)
+    console.log("parkings: ", res)
     result(null, res)
   })
 }
 
-place.updateById = (id, place, result) => {
+parking.findAll = (result) => {
+  sql.query("SELECT * FROM parking ", (err, res) => {
+    if (err) {
+      console.log("error: ", err)
+      result(null, err)
+      return
+    }
+    console.log("parkings: ", res)
+    result(null, res)
+  })
+}
+
+parking.updateById = (id, parking, result) => {
   sql.query(
-          "UPDATE place SET name = ?, address = ?, user_id = ? WHERE id = ?",
-          [place.title, place.description, place.user_id, id],
+          "UPDATE parking SET name = ?, address = ?, user_id = ? WHERE id = ?",
+          [parking.name, parking.address, parking.user_id, id],
           (err, res) => {
             if (err) {
               console.log("error: ", err)
@@ -60,43 +78,43 @@ place.updateById = (id, place, result) => {
               return
             }
             if (res.affectedRows === 0) {
-              // not found place with the id
+              // not found parking with the id
               result({kind: "not_found"}, null)
               return
             }
-            console.log("updated place: ", {id: id, ...place})
-            result(null, {id: id, ...place})
+            console.log("updated parking: ", {id: id, ...parking})
+            result(null, {id: id, ...parking})
           }
   )
 }
 
-place.remove = (id, result) => {
-  sql.query("DELETE FROM place WHERE id = ?", id, (err, res) => {
+parking.remove = (id, result) => {
+  sql.query("DELETE FROM parking WHERE id = ?", id, (err, res) => {
     if (err) {
       console.log("error: ", err)
       result(null, err)
       return
     }
     if (res.affectedRows === 0) {
-      // not found place with the id
+      // not found parking with the id
       result({kind: "not_found"}, null)
       return
     }
-    console.log("deleted place with id: ", id)
+    console.log("deleted parking with id: ", id)
     result(null, res)
   })
 }
 
-place.removeAllByUserId = (user_id, result) => {
-  sql.query("DELETE FROM place WHERE user_id = ?", place.user_id, (err, res) => {
+parking.removeAllByUserId = (user_id, result) => {
+  sql.query("DELETE FROM parking WHERE user_id = ?", parking.user_id, (err, res) => {
     if (err) {
       console.log("error: ", err)
       result(null, err)
       return
     }
-    console.log(`deleted ${res.affectedRows} place`)
+    console.log(`deleted ${res.affectedRows} parking`)
     result(null, res)
   })
 }
 
-module.exports = place
+module.exports = parking

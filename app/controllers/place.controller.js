@@ -1,4 +1,4 @@
-const Place = require("../models/place.model.js")
+const Place = require("../models/parking.model.js")
 
 exports.create = (req, res) => {
 
@@ -8,16 +8,16 @@ exports.create = (req, res) => {
     })
   }
 
-  const place = new Place({
+  const parking = new Place({
     name: req.body.name,
     address: req.body.address,
     user_id: req.body.user_id
   })
 
-  Place.create(place, (err, data) => {
+  Place.create(parking, (err, data) => {
     if (err)
       res.status(500).send({
-        message: err.message || "Some error occurred while creating the place."
+        message: err.message || "Some error occurred while creating the parking."
       })
     else res.send(data)
   })
@@ -28,11 +28,11 @@ exports.findOne = (req, res) => {
     if (err) {
       if (err.kind === "not_found") {
         res.status(404).send({
-          message: `Not found place with id ${req.params.id}.`
+          message: `Not found parking with id ${req.params.id}.`
         })
       } else {
         res.status(500).send({
-          message: "Error retrieving place with id " + req.params.id
+          message: "Error retrieving parking with id " + req.params.id
         })
       }
     } else res.send(data)
@@ -43,7 +43,7 @@ exports.findAllByUserId = (req, res) => {
   Place.getAllByUserId(req.params.user_id, (err, data) => {
     if (err)
       res.status(500).send({
-        message: err.message || `No found places owned by id ${req.params.id}.`
+        message: err.message || `No found parkings owned by id ${req.params.id}.`
       })
     else res.send(data)
   })
@@ -59,16 +59,16 @@ exports.update = (req, res) => {
   console.log(req.body)
   Place.updateById(
           req.params.id,
-          new place(req.body),
+          new parking(req.body),
           (err, data) => {
             if (err) {
               if (err.kind === "not_found") {
                 res.status(404).send({
-                  message: `Not found place with id ${req.params.id}.`
+                  message: `Not found parking with id ${req.params.id}.`
                 })
               } else {
                 res.status(500).send({
-                  message: "Error updating place with id " + req.params.id
+                  message: "Error updating parking with id " + req.params.id
                 })
               }
             } else res.send(data)
@@ -81,14 +81,14 @@ exports.delete = (req, res) => {
     if (err) {
       if (err.kind === "not_found") {
         res.status(404).send({
-          message: `Not found place with id ${req.params.id}.`
+          message: `Not found parking with id ${req.params.id}.`
         })
       } else {
         res.status(500).send({
-          message: "Could not delete place with id " + req.params.id
+          message: "Could not delete parking with id " + req.params.id
         })
       }
-    } else res.send({message: `place was deleted successfully!`})
+    } else res.send({message: `parking was deleted successfully!`})
   })
 }
 
@@ -97,8 +97,8 @@ exports.deleteAllByUserId = (req, res) => {
     if (err)
       res.status(500).send({
         message:
-                err.message || "Some error occurred while removing all place's."
+                err.message || "Some error occurred while removing all parking's."
       })
-    else res.send({message: `All place's were deleted successfully!`})
+    else res.send({message: `All parking's were deleted successfully!`})
   })
 }

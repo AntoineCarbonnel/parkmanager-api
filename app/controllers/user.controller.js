@@ -1,4 +1,55 @@
-const User = require("../models/user.model.js")
+const User = require("../models/user.model.js"),
+        jwt = require('jsonwebtoken'),
+        bcrypt = require("bcrypt"),
+        saltRounds = 10
+
+exports.login = (req, res) => {
+  if (!req.body) {
+    res.status(400).send({
+      message: "Content can not be empty!"
+    })
+  }
+
+  const user = new User({
+    firstname: '',
+    lastname: '',
+    email: req.body.email,
+    password: req.body.password,
+  })
+
+  User.findByEmail(user, (err, data) => {
+    if (err) {
+      if (err.kind === "not_found") {
+        res.status(404).send({
+          message: "Email not found"
+        })
+      } else {
+        res.status(500).send({
+          message: "Email not found"
+        })
+      }
+    } else {
+
+      bcrypt.compare(user.password, data.password)
+              .then(function (result) {
+                if (result) {
+                  res.json({
+                    data,
+                    token: jwt.sign(
+                            {userId: data.id,},
+                            'saucisson',
+                            {expiresIn: '24h'}
+                    )
+                  })
+                } else {
+                  res.status(401).json({
+                    data: 'Incorrect password'
+                  })
+                }
+              });
+    }
+  })
+}
 
 exports.create = (req, res) => {
 
@@ -9,10 +60,12 @@ exports.create = (req, res) => {
   }
 
   const user = new User({
-    name: req.body.name,
-    address: req.body.address,
-    user_id: req.body.user_id
+    firstname: req.body.firstname,
+    lastname: req.body.lastname,
+    email: req.body.email,
+    password: bcrypt.hashSync(req.body.password, saltRounds),
   })
+
 
   User.create(user, (err, data) => {
     if (err)
@@ -56,7 +109,7 @@ exports.update = (req, res) => {
       message: "Content can not be empty!"
     })
   }
-  console.log(req.body)
+
   User.updateById(
           req.params.id,
           new User(req.body),
@@ -93,7 +146,7 @@ exports.delete = (req, res) => {
 }
 
 exports.deleteAll = (req, res) => {
-  User.removeAll( (err, data) => {
+  User.removeAll((err, data) => {
     if (err)
       res.status(500).send({
         message:
